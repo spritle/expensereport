@@ -73,7 +73,7 @@ class LoginController < ApplicationController
   def destroy
     @bill = Bill.find(params[:id])
     if @bill.destroy
-      redirect_to :action => "login"
+      redirect_to :action => "index"
     end
   end
 
