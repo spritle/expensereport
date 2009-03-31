@@ -1,79 +1,63 @@
 <center>
-<h2>
-  <%= @month_year %>
-</h2>
+  <h2>
+    <%= @month_year %>
+  </h2>
 </center>
-<table id="bill_list"  border="1">
-  <tr>
-    <th>
-      Date
-    </th>
-    <th>
-      Description
-    </th>
-        <th>
-      Item Code
-    </th>
-    <th>
-      Curr
-    </th>
-    <th>
-      Amount
-    </th>
-  </tr>
-  <% @bills.each do |bill| %>
+<center>
+  <table id="bill_list"  border="1">
     <tr>
-      <td>
-        <%=h display_date(bill.date) %>
-      </td>
-      <td>
-        <%= bill.description %>
+      <th>
+        Date
+      </th>
+      <th>
+        Item code(Description)
+      </th>
+      <th>
+        Bill date
+      </th>
+      <th>
+        Amount(INR)
+      </th>
+    </tr>
+    <% @bills.each do |bill| %>
+      <tr>
         <td>
-          <%= bill.item_code %>
+          <%=h display_date(bill.date) %>
         </td>
         <td>
-          <%= bill.curr %>
+          <%= bill.description %>
+        </td>
+        <td>
+          <%= bill.bill_date %>
         </td>
         <td>
           <%= bill.amount %>
         </td>
 
-      <td><%= link_to_function("Edit",
-        "Element.show('edit_bill_#{@bills.id}')")%></td>
-        
-      <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
-    </tr>
-  <%end%>
+        <td><%= link_to_function("Edit",
+          "Element.show('edit_bill_#{@bills.id}')")%></td>
 
-</table>
-<br/>
-<center>
+        <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
+      </tr>
+    <%end%>
 
-  <p id="add_link">
-  <%=button_to_function "Add new bill", visual_effect(:toggle_slide, "add_bill",:duration => 1)%>
+  </table>
+  <br/>
+</center>
+<p id="add_link">
+  <center>
+    <%=button_to_function "Add new bill", visual_effect(:toggle_slide, "add_bill",:duration => 1)%>
+  </center>
 </p>
 <div id="add_bill" style="display:none;">
   <% form_remote_tag(:url => {:action => 'create'},
     :update => "bill_list", :position => :bottom,
     :html => {:id => 'bill_form'}) do %>
     <br/>
-   
-    Description: <%= text_field "bill", "description" %>
-    <br/>
-     Bill date:<%= calendar_date_select "bill","bill_date" %>
-    <br/>
-    Item Code:<%= collection_select (:bill,:item_code, @items, :id, :item_code_description, :class =>"Item") %>
-    <br/>
-    Currency: <%= text_field "bill", "curr" %>
-    <br/>
-    Amount: <%= text_field "bill", "amount" %>
-    <br/>
-    Rate: <%= text_field "bill", "rate" %>
-    <br/>
-    Amount Inr: <%= text_field "bill", "amount_inr" %>
-    <br/>
+    Bill date:<%= calendar_date_select "bill","bill_date", :size=> '15' %>
+    Item Code:<%= collection_select (:bill,:description, @items, :description, :item_code_description, :class =>"Item") %>
+    Amount: <%= text_field "bill", "amount",:size=> '10' %>
     <%= submit_tag 'Add' %>
   <% end %>
 </div>
-<%= link_to 'Index', :action=> "index" %>|<%= link_to 'SaveExcel', :action=> "save" %>
-</center>
+<%= link_to 'Index', :action=> "index" %>
