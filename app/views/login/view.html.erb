@@ -1,5 +1,4 @@
 <center>
-
 <h2>
   <%= @month_year %>
 </h2>
@@ -25,7 +24,7 @@
   <% @bills.each do |bill| %>
     <tr>
       <td>
-        <%= bill.date %>
+        <%=h display_date(bill.date) %>
       </td>
       <td>
         <%= bill.description %>
@@ -49,5 +48,32 @@
 </table>
 <br/>
 <center>
+
+  <p id="add_link">
+  <%=button_to_function "Add new bill", visual_effect(:toggle_slide, "add_bill",:duration => 1)%>
+</p>
+<div id="add_bill" style="display:none;">
+  <% form_remote_tag(:url => {:action => 'create'},
+    :update => "bill_list", :position => :bottom,
+    :html => {:id => 'bill_form'}) do %>
+    <br/>
+   
+    Description: <%= text_field "bill", "description" %>
+    <br/>
+     Bill date:<%= calendar_date_select "bill","bill_date" %>
+    <br/>
+    Item Code:<%= collection_select (:bill,:item_code, @items, :id, :item_code_description, :class =>"Item") %>
+    <br/>
+    Currency: <%= text_field "bill", "curr" %>
+    <br/>
+    Amount: <%= text_field "bill", "amount" %>
+    <br/>
+    Rate: <%= text_field "bill", "rate" %>
+    <br/>
+    Amount Inr: <%= text_field "bill", "amount_inr" %>
+    <br/>
+    <%= submit_tag 'Add' %>
+  <% end %>
+</div>
 <%= link_to 'Index', :action=> "index" %>|<%= link_to 'SaveExcel', :action=> "save" %>
 </center>

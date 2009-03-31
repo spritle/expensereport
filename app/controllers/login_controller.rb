@@ -27,6 +27,7 @@ class LoginController < ApplicationController
   end
   def index
     @title = "Expense Calculator"
+    flash[:notice] = nil
     unless session[:user_id]
       flash[:notice] = "Please log in first"
       redirect_to :action => "login"
@@ -44,7 +45,7 @@ class LoginController < ApplicationController
       if user
         session[:user_id] = user.id
         session[:user_name] = user.user_name
-        #flash[:notice] = "User #{user.user_name} logged in!"
+        flash[:notice] = nil
         redirect_to :action => "index"
       else
         # Don't show the password in the view.
@@ -62,22 +63,23 @@ class LoginController < ApplicationController
   end
 
   def update
-#    if Bill.update({ :description => 'Samuel', :item_code => 123 })
-#      render :partial => 'bill', :object => @items
-#    else
-#      redirect_to :action => 'login'
-#    end
+    #    if Bill.update({ :description => 'Samuel', :item_code => 123 })
+    #      render :partial => 'bill', :object => @items
+    #    else
+    #      redirect_to :action => 'login'
+    #    end
   end
 
   def destroy
     @bill = Bill.find(params[:id])
     if @bill.destroy
-      redirect_to :action => 'list'      
+      redirect_to :action => "login"
     end
   end
 
   def view
     @title = "Expense Calculator"
+    @items = Item.find(:all)
     @bills = Bill.find(:all, :conditions => "month_year = '#{params[:month_year]}'AND user_name = '#{session[:user_name]}'")
   end
 

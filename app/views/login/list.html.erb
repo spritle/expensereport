@@ -9,10 +9,10 @@
   <% @bills.each do |bill| %>
     <tr>
       <td>
-          <%= bill.date %>
+        <%= bill.date %>
       </td>
       <td>
-          <%= bill.description %>
+        <%= bill.description %>
         <td>
           <%= bill.item_code %>
         </td>
@@ -30,7 +30,7 @@
         </td>
       </td>
       <td><%= link_to_function("Edit",
-          "Element.show('edit_bill_#{@bills.id}')")%></td>
+        "Element.show('edit_bill_#{@bills.id}')")%></td>
       <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
     </tr>
   <%end%>
@@ -47,7 +47,9 @@
     <br/>
     Description: <%= text_field "bill", "description" %>
     <br/>
-    Item Code:<%= collection_select(:bill, :item_code, @items, :item_code, :item_code, :class =>"Item") %>
+    Bill date:<%= calendar_date_select "bill","bill_date" %>
+    <br/>
+    Item Code:<%= collection_select (:bill,:item_code, @items, :id, :item_code_description, :class =>"Item") %>
     <br/>
     Currency: <%= text_field "bill", "curr" %>
     <br/>
@@ -63,7 +65,7 @@
 
 <div id="edit_bill_<%= @bills.id %>" style="display:none;">
   <% form_remote_tag(:url => {:action => 'update'},
-     :update => "bill_list",:position => :bottom,
+    :update => "bill_list",:position => :bottom,
     :html => {:id => 'bill_form'}) do %>
     <br/>
     Description: <%= text_field "bill", "description" %>
