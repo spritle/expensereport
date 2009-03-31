@@ -1,0 +1,53 @@
+<center>
+
+<h2>
+  <%= @month_year %>
+</h2>
+</center>
+<table id="bill_list"  border="1">
+  <tr>
+    <th>
+      Date
+    </th>
+    <th>
+      Description
+    </th>
+        <th>
+      Item Code
+    </th>
+    <th>
+      Curr
+    </th>
+    <th>
+      Amount
+    </th>
+  </tr>
+  <% @bills.each do |bill| %>
+    <tr>
+      <td>
+        <%= bill.date %>
+      </td>
+      <td>
+        <%= bill.description %>
+        <td>
+          <%= bill.item_code %>
+        </td>
+        <td>
+          <%= bill.curr %>
+        </td>
+        <td>
+          <%= bill.amount %>
+        </td>
+
+      <td><%= link_to_function("Edit",
+        "Element.show('edit_bill_#{@bills.id}')")%></td>
+        
+      <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
+    </tr>
+  <%end%>
+
+</table>
+<br/>
+<center>
+<%= link_to 'Index', :action=> "index" %>|<%= link_to 'SaveExcel', :action=> "save" %>
+</center>

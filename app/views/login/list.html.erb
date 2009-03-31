@@ -1,0 +1,85 @@
+<h1>Listing Bills</h1>
+
+<table id="bill_list"  border="1">
+  <tr>
+    <% for column in Bill.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+  <% @bills.each do |bill| %>
+    <tr>
+      <td>
+          <%= bill.date %>
+      </td>
+      <td>
+          <%= bill.description %>
+        <td>
+          <%= bill.item_code %>
+        </td>
+        <td>
+          <%= bill.curr %>
+        </td>
+        <td>
+          <%= bill.amount %>
+        </td>
+        <td>
+          <%= bill.rate %>
+        </td>
+        <td>
+          <%= bill.amount_inr %>
+        </td>
+      </td>
+      <td><%= link_to_function("Edit",
+          "Element.show('edit_bill_#{@bills.id}')")%></td>
+      <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
+    </tr>
+  <%end%>
+</table>
+
+
+<p id="add_link">
+  <%=button_to_function "Add new bill", visual_effect(:toggle_slide, "add_bill",:duration => 1)%>
+</p>
+<div id="add_bill" style="display:none;">
+  <% form_remote_tag(:url => {:action => 'create'},
+    :update => "bill_list", :position => :bottom,
+    :html => {:id => 'bill_form'}) do %>
+    <br/>
+    Description: <%= text_field "bill", "description" %>
+    <br/>
+    Item Code:<%= collection_select(:bill, :item_code, @items, :item_code, :item_code, :class =>"Item") %>
+    <br/>
+    Currency: <%= text_field "bill", "curr" %>
+    <br/>
+    Amount: <%= text_field "bill", "amount" %>
+    <br/>
+    Rate: <%= text_field "bill", "rate" %>
+    <br/>
+    Amount Inr: <%= text_field "bill", "amount_inr" %>
+    <br/>
+    <%= submit_tag 'Add' %>
+  <% end %>
+</div>
+
+<div id="edit_bill_<%= @bills.id %>" style="display:none;">
+  <% form_remote_tag(:url => {:action => 'update'},
+     :update => "bill_list",:position => :bottom,
+    :html => {:id => 'bill_form'}) do %>
+    <br/>
+    Description: <%= text_field "bill", "description" %>
+    <br/>
+    Item Code:<%= collection_select(:bill, :item_code, @items, :item_code, :item_code, :class =>"Item") %>
+    <br/>
+    Currency: <%= text_field "bill", "curr" %>
+    <br/>
+    Amount: <%= text_field "bill", "amount" %>
+    <br/>
+    Rate: <%= text_field "bill", "rate" %>
+    <br/>
+    Amount Inr: <%= text_field "bill", "amount_inr" %>
+    <br/>
+    <%= submit_tag 'Update' %>
+  <% end %>
+</div>
+
+</body>

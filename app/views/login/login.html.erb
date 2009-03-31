@@ -1,0 +1,21 @@
+
+<% form_for :user do |form| %>
+  <fieldset>
+    <legend>Expense Calculator Login </legend>
+    <div class="form_row">
+      <label for="user_name">UserName:</label>
+      <%= form.text_field :user_name,
+        :size => 20,
+        :maxlength => 30 %>
+    </div>
+    <div class="form_row">
+      <label for="password">Password:</label>
+      <%= form.password_field :password,
+        :size => 20,
+        :maxlength => 30 %>
+    </div>
+    <div class="form_row">
+      <%= submit_tag "Login!", :class => "submit" %>
+    </div>
+  </fieldset>
+<% end %>

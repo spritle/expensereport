@@ -1,0 +1,36 @@
+
+<h1>Listing Bills</h1>
+<table id="bill_list"  border="1">
+  <tr>
+    <% for column in Item.content_columns %>
+      <th><%= column.human_name %></th>
+    <% end %>
+  </tr>
+  <% @items.each do |item| %>
+    <tr>
+      <td>
+        <div id="show_item_<%= item.item_code %>">
+          <%= item.item_code %>
+          <% hidden_field :item, :item_code %>
+        </div>
+        
+        <div id="edit_item_<%= item.item_code %>"  style="display:none;">
+          <input type=text name='item' value=<%= item.item_code%> size="7" />
+        </div>
+      </td>
+      <td>
+        <div id="show_item_desc_<%= item.item_code %>">
+          <%= item.description %>
+        </div>
+        <div id="edit_item_desc_<%= item.item_code %>"  style="display:none;">
+          <%= text_field 'item', 'item_code' %>
+          <%= link_to 'Update', :action =>"Update", :id =>item.id  %>
+        </div> 
+      </td>
+      <td><%= link_to_function("Edit",
+        "Element.remove('show_item_#{item.item_code}');Element.remove('show_item_desc_#{item.item_code}'); Element.show('edit_item_#{item.item_code}');
+        Element.show('edit_item_desc_#{item.item_code}')")%></td>
+      <td><%= link_to 'Delete', :action => "destroy", :id => item.id%></td>
+    </tr>
+  <%end%>
+</table>

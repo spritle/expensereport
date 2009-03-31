@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title><%= @title %></title>
+    <%= stylesheet_link_tag "site" %>
+    <%= javascript_include_tag :defaults %>
+  </head>
+  <body>
+    <div id="whole_page">
+    <div id="header">Expense Calculator</div>
+    <div id="nav">
+      <span class="right">
+        <% if session[:user_id] -%>          
+          <%= nav_link "Logout", "login", "logout" %>
+        <% else -%>          
+          <%= nav_link "Login", "login", "login" %>
+        <% end -%>
+      </span>
+    </div>
+    <div id="content">
+      <% if flash[:notice] -%>
+        <div id="notice"><%= flash[:notice] %></div>
+      <% end -%>
+      <%= yield %>
+    </div>    
+  </body>
+</html>
