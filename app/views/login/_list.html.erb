@@ -1,0 +1,43 @@
+  <table id="bill_list"  border="1">
+    <tr>
+      <th>
+        Date
+      </th>
+      <th>
+        Item code(Description)
+      </th>
+      <th>
+        Bill date
+      </th>
+      <th>
+        Amount(INR)
+      </th>
+    </tr>
+    <% @bills.each do |bill| %>
+      <tr>
+        <td>
+          <%=h display_date(bill.date) %>
+        </td>
+        <td>
+          <%= bill.description %>
+        </td>
+        <td>
+          <%= bill.bill_date %>
+        </td>
+        <td>
+          <%= bill.amount %>
+        </td>
+
+        <td><%= link_to_function("Edit",
+          "Element.show('edit_bill_#{@bills.id}')")%></td>
+
+        <td><!-- %= link_to 'Delete', :action => "destroy", :id => bill.id%-->
+          <%= link_to_remote "Delete",
+            :url => { :action => "destroy", :id => bill.id },
+            :confirm => 'Sure?'
+          %>
+        </td>
+      </tr>
+    <%end%>
+
+  </table>
