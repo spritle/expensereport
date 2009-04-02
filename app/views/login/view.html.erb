@@ -4,44 +4,9 @@
   </h2>
 </center>
 <center>
-  <table id="bill_list"  border="1">
-    <tr>
-      <th>
-        Date
-      </th>
-      <th>
-        Item code(Description)
-      </th>
-      <th>
-        Bill date
-      </th>
-      <th>
-        Amount(INR)
-      </th>
-    </tr>
-    <% @bills.each do |bill| %>
-      <tr>
-        <td>
-          <%=h display_date(bill.date) %>
-        </td>
-        <td>
-          <%= bill.description %>
-        </td>
-        <td>
-          <%= bill.bill_date %>
-        </td>
-        <td>
-          <%= bill.amount %>
-        </td>
-
-        <td><%= link_to_function("Edit",
-          "Element.show('edit_bill_#{@bills.id}')")%></td>
-
-        <td><%= link_to 'Delete', :action => "destroy", :id => bill.id%></td>
-      </tr>
-    <%end%>
-
-  </table>
+  <div id="ajax_bills">
+    <%= render :partial=>"list", :locals=>{:bills=>@bills} %>
+  </div>
   <br/>
 </center>
 <p id="add_link">
@@ -55,7 +20,8 @@
     :html => {:id => 'bill_form'}) do %>
     <br/>
     Bill date:<%= calendar_date_select "bill","bill_date", :size=> '15' %>
-    Item Code:<%= collection_select (:bill,:description, @items, :description, :item_code_description, :class =>"Item") %>
+    Item Code:<%= collection_select(:bill,:description,
+      @items, :description, :item_code_description, :class =>"Item") %>
     Amount: <%= text_field "bill", "amount",:size=> '10' %>
     <%= submit_tag 'Add' %>
   <% end %>
