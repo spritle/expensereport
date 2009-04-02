@@ -14,7 +14,7 @@ class LoginController < ApplicationController
     @bills.user_name = session[:user_name]
     @bills.month_year = Time.now.strftime("%B") + "-" + Time.now.strftime("%y")
     if @bills.save
-      render :partial => 'bill', :object => @items
+      render :partial => 'bill'
     end
   end
   def item
@@ -72,15 +72,24 @@ class LoginController < ApplicationController
 
   def destroy
     @bill = Bill.find(params[:id])
-    if @bill.destroy
-      redirect_to :action => "index"
+    @bill.destroy
+    @bills = Bill.find(:all)
+    respond_to do |format|
+      format.html {redirect_to(@bill)}
+      format.js do
+       render :update do |page|
+         page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
+       end
+      end
+
     end
   end
 
   def view
     @title = "Expense Calculator"
     @items = Item.find(:all)
-    @bills = Bill.find(:all, :conditions => "month_year = '#{params[:month_year]}'AND user_name = '#{session[:user_name]}'")
+    @month_year = params[:month_year]
+    @bills = Bill.find(:all, :conditions => "month_year = '#{@month_year}'AND user_name = '#{session[:user_name]}'")
   end
 
   def save
