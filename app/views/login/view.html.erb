@@ -26,4 +26,17 @@
     <%= submit_tag 'Add' %>
   <% end %>
 </div>
+
+<div id="edit_bill" style="display:none;">
+  <% form_remote_tag(:url => {:action => 'update'},
+    :update => "bill_list", :position => :bottom,
+    :html => {:id => 'bill_form'}) do %>
+    <br/>
+    Bill date:<%= calendar_date_select "bill","bill_date", :size=> '15' %>
+    Item Code:<%= collection_select(:bill,:description,
+      @items, :description, :item_code_description, :class =>"Item") %>
+    Amount: <%= text_field "bill", "amount",:size=> '10' %>
+    <%= submit_tag 'Update' %>
+  <% end %>
+</div>
 <%= link_to 'Index', :action=> "index" %>

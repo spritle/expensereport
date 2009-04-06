@@ -63,25 +63,28 @@ class LoginController < ApplicationController
   end
 
   def update
-    #    if Bill.update({ :description => 'Samuel', :item_code => 123 })
-    #      render :partial => 'bill', :object => @items
-    #    else
-    #      redirect_to :action => 'login'
-    #    end
-  end
-
-  def destroy
     @bill = Bill.find(params[:id])
-    @bill.destroy
-    @bills = Bill.find(:all)
+    @bill.update_attribute(:amount,params[:amount])
     respond_to do |format|
       format.html {redirect_to(@bill)}
       format.js do
-       render :update do |page|
-         page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
-       end
+        render :update do |page|
+          page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
+        end
       end
-
+    end
+  end
+  def destroy
+    @bill = Bill.find(params[:id])
+    @bill.destroy
+    @bills = Bill.find(:all, :conditions => "month_year = '#{'April-09'}' AND user_name = '#{session[:user_name]}'")
+    respond_to do |format|
+      format.html {redirect_to(@bill)}
+      format.js do
+        render :update do |page|
+          page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
+        end
+      end
     end
   end
 
@@ -96,7 +99,7 @@ class LoginController < ApplicationController
     file = "#{session[:user_name]}_#{Time.now.strftime('%a-%b-%y-%I-%M-%S-%p')}_Bill.xls"
     workbook= Spreadsheet::Excel.new(  "#{RAILS_ROOT}/#{file}" )
     f1 = Format.new(
-      :size => 10,      
+      :size => 10,
       :fg_color => "yellow"
     )
     f2 = Format.new(

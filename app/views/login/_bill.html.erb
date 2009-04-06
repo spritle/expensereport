@@ -2,12 +2,23 @@
 
 <tr>
 
-<td><%= @bills.date%></td>
-<td><%= @bills.description %></td>
+  <td><%= h display_date(@bills.date)%></td>
+  <td><%= @bills.description %></td>
 
-<td><%= @bills.bill_date %></td>
+  <td><%=@bills.bill_date %></td>
 
-<td><%= @bills.amount %></td>
+  <td><%= @bills.amount %></td>
+
+  <td><%= link_to_function("Edit",
+      "Element.show('edit_bill_#{@bills.id}')")%>
+  </td>
+
+  <td>
+    <%= link_to_remote "Delete",
+      :url => { :action => "destroy", :id => @bills.id },
+      :confirm => 'Sure?'
+    %>
+  </td>
 
 
 
