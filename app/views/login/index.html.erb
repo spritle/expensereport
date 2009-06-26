@@ -1,5 +1,5 @@
 <h1>Welcome! <%= @user_name %> </h1>
-
+<h3> <%= @temp %> </h3>
 <table id="bill_list"  border="1">
   <tr>
     <th>Month-Year</th>
@@ -7,14 +7,14 @@
     <th>View in detail</th>
   </tr>
   <% @bills.each do |bill| %>
-  <tr>
-    <td>
-      <%= bill.month_year %>
-    </td>
-    <td>
-      <%= bill.amount %>
-    </td>
-    <td><%= link_to 'View More', :action=> "view", :month_year => bill.month_year %></td>
-  </tr>
+    <tr>
+      <td>
+        <%= bill.month_year %>
+      </td>
+      <td>
+        <%= bill.amount %>
+      </td>
+      <td><%= link_to 'View More', :action=> "view", :month_year => bill.month_year %></td>
+    </tr>
   <% end %>
 </table>

@@ -12,9 +12,15 @@
     <th>
       Amount(INR)
     </th>
+    <th>
+      Edit
+    </th>
+    <th>
+      Delete
+    </th>
   </tr>
   <% @bills.each do |bill| %>
-    <tr>
+    <tr id="eip_<%= bill.id.to_s %>">
       <td>
         <%=h display_date(bill.date) %>
       </td>
@@ -28,15 +34,14 @@
         <%= bill.amount %>
       </td>
 
-      <td> <%=button_to_function "Edit", visual_effect(:toggle_slide, "edit_bill",:duration => 1),
-        :url => { :action => "update", :id => bill.id }%></td>
+      <td><%= link_to_remote "Edit",
+          :update => "eip_" + bill.id.to_s,
+          :url => { :action => "edit", :id => bill.id } %></td>
       <td>
         <%= link_to_remote "Delete",
-          :url => { :action => "destroy", :id => bill.id },
-          :confirm => 'Sure?'
+          :url => { :action => "destroy", :id => bill.id }
       %>
       </td>
     </tr>
   <%end%>
-
 </table>

@@ -23,7 +23,13 @@ class LoginController < ApplicationController
     #itemcode = params[:item][:item_code]
   end
   def edit
-
+    @bill = Bill.find params[:id]
+    if @bill.flag == 0
+      @items = Item.find :all
+      render :partial => 'editinplace'
+    else
+      render :text => "This page is freezed, can't be modified!!!"
+    end
   end
   def index
     @title = "Expense Calculator"
@@ -56,35 +62,33 @@ class LoginController < ApplicationController
   end
 
   def logout
-    @title = "Expense Calculator"    
+    @title = "Expense Calculator"
     session[:user_id] = nil
     flash[:notice] = "User " + session[:user_name] + " Logged out"
-    
   end
 
   def update
     @bill = Bill.find(params[:id])
-    @bill.update_attribute(:amount,params[:amount])
-    respond_to do |format|
-      format.html {redirect_to(@bill)}
-      format.js do
-        render :update do |page|
-          page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
-        end
-      end
-    end
+    @bill.update_attributes(:bill_date => params[:bill][:bill_date],
+      :description => params[:bill][:description],
+      :amount => params[:bill][:amount])
+    render :partial => 'update'
   end
   def destroy
     @bill = Bill.find(params[:id])
-    @bill.destroy
-    @bills = Bill.find(:all, :conditions => "month_year = '#{'April-09'}' AND user_name = '#{session[:user_name]}'")
-    respond_to do |format|
-      format.html {redirect_to(@bill)}
-      format.js do
-        render :update do |page|
-          page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
+    if @bill.flag == 0
+      @bill.destroy
+      @bills = Bill.find(:all, :conditions => "month_year = '#{'April-09'}' AND user_name = '#{session[:user_name]}'")
+      respond_to do |format|
+        format.html {redirect_to(@bill)}
+        format.js do
+          render :update do |page|
+            page.replace_html 'ajax_bills', :partial=>"list", :locals=>{:bills=>@bills}
+          end
         end
       end
+    else
+      redirect_to :action => 'index'
     end
   end
 
@@ -92,6 +96,7 @@ class LoginController < ApplicationController
     @title = "Expense Calculator"
     @items = Item.find(:all)
     @month_year = params[:month_year]
+    session[:month_year] = @month_year
     @bills = Bill.find(:all, :conditions => "month_year = '#{@month_year}'AND user_name = '#{session[:user_name]}'")
   end
 
@@ -143,7 +148,14 @@ class LoginController < ApplicationController
       row += 1
     end
     workbook.close
-
+  end
+  def freeze
+    @bills = Bill.find(:all, :conditions => "month_year = '#{session[:month_year]}'AND user_name = '#{session[:user_name]}'")
+    @bills.each do |bill|
+      bill.update_attribute('flag', 1)
+    end
+    flash[:notice] = "Data is freezed"
+    redirect_to :action => 'index'
   end
 end
 
